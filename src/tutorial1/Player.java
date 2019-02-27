@@ -6,6 +6,7 @@
 package tutorial1;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -25,7 +26,7 @@ public class Player extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.speed = 1;
+        this.speed = 5;
     }
 
     public int getDirection() {
@@ -63,32 +64,29 @@ public class Player extends Item {
     @Override
     public void tick() {
         // moving player depending on flags
-        if (game.getKeyManager().up){
-            setY(getY() - 1);
-        }
-        if (game.getKeyManager().down){
-            setY(getY() + 1);
-        }
         if (game.getKeyManager().left){
-            setX(getX() - 1);
+            setX(getX() - getSpeed());
         }
         if (game.getKeyManager().right){
-            setX(getX() + 1);
+            setX(getX() + getSpeed());
         }
         // reset x position and y position if colision
-        if (getX() + 60 >= game.getWidth()){
-            setX(game.getWidth() - 60);
+        if (getX() + 160 >= game.getWidth()){
+            setX(game.getWidth() - 160);
         }
-        else if (getX() <= -30){
-            setX(-30);
-        }
-        if (getY() + 80 >= game.getHeight()){
-            setY(game.getHeight() - 80);
-        }
-        else if (getY() <= -20){
-            setY(-20);
+        else if (getX() <= 0){
+            setX(0);
         }
         
+    }
+    
+    //Funcion que crea un rectangulo
+    public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+    //Funcion que nos checa si coliciona
+    public boolean intersecta(Object obj) {
+        return obj instanceof Ball && getPerimetro().intersects(((Ball) obj).getPerimetro());
     }
 
     @Override

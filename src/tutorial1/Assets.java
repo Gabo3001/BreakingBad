@@ -14,10 +14,12 @@ import java.awt.image.BufferedImage;
 public class Assets {
     public static BufferedImage background;
     public static BufferedImage player;
+    public static BufferedImage ball;
     
     public static void init(){
         background = ImageLoader.loadImage("/tutorial1/images/Background.png");
-        player = ImageLoader.loadImage("/tutorial1/images/Sprite.png");
+        player = ImageLoader.loadImage("/tutorial1/images/PoliceCar.png");
+        ball = ImageLoader.loadImage("/tutorial1/images/Ball.png");
     }
     
     

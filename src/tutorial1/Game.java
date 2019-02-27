@@ -25,6 +25,7 @@ public class Game implements Runnable{
     private Thread thread;
     private boolean running;
     private Player player;
+    private Ball ball;              //Variable de tipo Ball
     private KeyManager keyManager;
     
     public Game(String title, int width, int height){
@@ -46,7 +47,8 @@ public class Game implements Runnable{
     private void init(){
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Player(0, getHeight() - 100, 1, 100, 100, this);
+        player = new Player(330, getHeight() - 100, 1, 160, 80, this);
+        ball = new Ball(385, getHeight() - 145, 1, 50, 50, this);
         display.getJframe().addKeyListener(keyManager);
     }
     
@@ -89,6 +91,15 @@ public class Game implements Runnable{
         keyManager.tick();
         // avanceing player with colision
         player.tick();
+        ball.tick();
+        if (player.intersecta(ball)){
+            if (ball.getDirection() == 3){
+                ball.setDirection(1);
+            }
+            else{
+                ball.setDirection(2);
+            }
+        }
     }
     
     private void render(){
@@ -102,6 +113,7 @@ public class Game implements Runnable{
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
+            ball.render(g);
             bs.show();
             g.dispose();
         }
