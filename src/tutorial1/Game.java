@@ -27,6 +27,7 @@ public class Game implements Runnable{
     private Player player;
     private Ball ball;              //Variable de tipo Ball
     private KeyManager keyManager;
+    private boolean start;          //Booleana que controlara el inicio
     
     public Game(String title, int width, int height){
         this.title = title;
@@ -34,6 +35,15 @@ public class Game implements Runnable{
         this.height = height;
         running = false;
         keyManager = new KeyManager();
+        start = false;                  //Se inicializa start en false
+    }
+
+    public boolean isStart() {
+        return start;
+    }
+
+    public void setStart(boolean start) {
+        this.start = start;
     }
     
     public int getWidth(){
@@ -89,14 +99,24 @@ public class Game implements Runnable{
     
     private void tick(){
         keyManager.tick();
-        // avanceing player with colision
+
         player.tick();
         ball.tick();
+        //Si se preciona space
+        if (getKeyManager().space){
+            //Se colocara start en true
+            setStart(true);
+        }
+        //Si la pelota intersecta con el player
         if (player.intersecta(ball)){
+            //Si la bola se mueve en la direccion 3 (Abajo a la derecha)
             if (ball.getDirection() == 3){
+                //Se cambia la direccion a 1 (Arriba a la derecha)
                 ball.setDirection(1);
             }
+            //En el caso contrario
             else{
+                //Se cambia la direcaccion a 2 (Arriba a la izquierda)
                 ball.setDirection(2);
             }
         }
