@@ -118,9 +118,12 @@ public class Game implements Runnable {
         }
         //Si la pelota sale de la pantalla por abajo
         if(ball.getY() >= getHeight()){
+            //Se pone start en falso
             setStart(false);
+            //Se coloca ball en la posicion inicial
             ball.setX(385);
             ball.setY(getHeight()-145);
+            //Se coloca al player en la posicion inicial
             player.setX(330);
             player.setY(getHeight()-100);
         }
