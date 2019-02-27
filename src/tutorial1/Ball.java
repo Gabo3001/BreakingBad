@@ -27,7 +27,7 @@ public class Ball extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.speed = 1;
+        this.speed = 2;
     }
 
     public int getDirection() {

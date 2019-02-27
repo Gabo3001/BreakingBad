@@ -82,14 +82,21 @@ public class Player extends Item {
 
     }
 
-    //Funcion que crea un rectangulo
+    //Funcion que crea un rectangulo en la mitad izquierda del player
     public Rectangle getPerimetro() {
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+        return new Rectangle(getX(), getY(), 80, getHeight());
     }
-
+    //Funcion que crea un rectangulo en la mitad derecha del player
+    public Rectangle getPerimetro2() {
+        return new Rectangle(getX()+80, getY(), 80, getHeight());
+    }
     //Funcion que nos checa si coliciona
     public boolean intersecta(Object obj) {
         return obj instanceof Ball && getPerimetro().intersects(((Ball) obj).getPerimetro());
+    }
+    //Funcion que nos checa si coliciona
+    public boolean intersecta2(Object obj) {
+        return obj instanceof Ball && getPerimetro2().intersects(((Ball) obj).getPerimetro());
     }
 
     @Override
