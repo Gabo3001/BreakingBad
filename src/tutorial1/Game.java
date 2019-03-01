@@ -116,18 +116,20 @@ public class Game implements Runnable{
             brick.tick();
             if(ball.intersecta(brick)){
                 brick.setLives(brick.getLives() - 1);
+
                 //Make the ball bounce away from brick
                 if(ball.getDirection() == 1)
-                    ball.setDirection(4);
-                
-                if(ball.getDirection() == 2)
                     ball.setDirection(3);
                 
-                if(ball.getDirection() == 3)
-                    ball.setDirection(2);
+                else if(ball.getDirection() == 2)
+                    ball.setDirection(4);
                 
-                if(ball.getDirection() == 4)
+                else if(ball.getDirection() == 3)
                     ball.setDirection(1);
+                
+                else if(ball.getDirection() == 4)
+                    ball.setDirection(2);
+
             }
             
             
