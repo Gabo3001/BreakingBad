@@ -13,14 +13,14 @@ import java.awt.Rectangle;
  * @author HOME
  */
 public class Player extends Item {
-    
+
     private int direction;
     private int width;
     private int height;
     private Game game;
     private int speed;
-    
-    public Player (int x, int y, int direction, int width, int height, Game game){
+
+    public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
         this.direction = direction;
         this.width = width;
@@ -60,38 +60,48 @@ public class Player extends Item {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    
+
     @Override
     public void tick() {
-        // moving player depending on flags
-        if (game.getKeyManager().left){
-            setX(getX() - getSpeed());
+        //Mientras start sea true
+        if (game.isStart()) {
+            // moving player depending on flags
+            if (game.getKeyManager().left) {
+                setX(getX() - getSpeed());
+            }
+            if (game.getKeyManager().right) {
+                setX(getX() + getSpeed());
+            }
+            // reset x position and y position if colision
+            if (getX() + 160 >= game.getWidth()) {
+                setX(game.getWidth() - 160);
+            } else if (getX() <= 0) {
+                setX(0);
+            }
         }
-        if (game.getKeyManager().right){
-            setX(getX() + getSpeed());
-        }
-        // reset x position and y position if colision
-        if (getX() + 160 >= game.getWidth()){
-            setX(game.getWidth() - 160);
-        }
-        else if (getX() <= 0){
-            setX(0);
-        }
-        
+
     }
-    
-    //Funcion que crea un rectangulo
+
+    //Funcion que crea un rectangulo en la mitad izquierda del player
     public Rectangle getPerimetro() {
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+        return new Rectangle(getX(), getY(), 80, getHeight());
+    }
+    //Funcion que crea un rectangulo en la mitad derecha del player
+    public Rectangle getPerimetro2() {
+        return new Rectangle(getX()+80, getY(), 80, getHeight());
     }
     //Funcion que nos checa si coliciona
     public boolean intersecta(Object obj) {
         return obj instanceof Ball && getPerimetro().intersects(((Ball) obj).getPerimetro());
     }
+    //Funcion que nos checa si coliciona
+    public boolean intersecta2(Object obj) {
+        return obj instanceof Ball && getPerimetro2().intersects(((Ball) obj).getPerimetro());
+    }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);         
+        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
     }
-    
+
 }
