@@ -1,5 +1,9 @@
 build
+
 build/*
 dist
+
 dist/*
+
 nbproject/private/
+Bricks

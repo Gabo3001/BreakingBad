@@ -27,7 +27,7 @@ public class Ball extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.speed = 1;
+        this.speed = 2;
     }
 
     public int getDirection() {
@@ -127,5 +127,10 @@ public class Ball extends Item {
     public void render(Graphics g) {
         g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);
     }
+
+    public boolean intersecta(Object obj) {
+        return obj instanceof Brick && getPerimetro().intersects(((Brick) obj).getPerimetro());
+    }
+    
 
 }
