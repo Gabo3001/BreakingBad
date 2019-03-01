@@ -13,14 +13,14 @@ import java.awt.Rectangle;
  * @author HOME
  */
 public class Player extends Item {
-    
+
     private int direction;
     private int width;
     private int height;
     private Game game;
     private int speed;
-    
-    public Player (int x, int y, int direction, int width, int height, Game game){
+
+    public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
         this.direction = direction;
         this.width = width;
@@ -60,30 +60,33 @@ public class Player extends Item {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    
+
     @Override
     public void tick() {
-        // moving player depending on flags
-        if (game.getKeyManager().left){
-            setX(getX() - getSpeed());
+        //Mientras start sea true
+        if (game.isStart()) {
+            // moving player depending on flags
+            if (game.getKeyManager().left) {
+                setX(getX() - getSpeed());
+            }
+            if (game.getKeyManager().right) {
+                setX(getX() + getSpeed());
+            }
+            // reset x position and y position if colision
+            if (getX() + 160 >= game.getWidth()) {
+                setX(game.getWidth() - 160);
+            } else if (getX() <= 0) {
+                setX(0);
+            }
         }
-        if (game.getKeyManager().right){
-            setX(getX() + getSpeed());
-        }
-        // reset x position and y position if colision
-        if (getX() + 160 >= game.getWidth()){
-            setX(game.getWidth() - 160);
-        }
-        else if (getX() <= 0){
-            setX(0);
-        }
-        
+
     }
-    
+
     //Funcion que crea un rectangulo
     public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
+
     //Funcion que nos checa si coliciona
     public boolean intersecta(Object obj) {
         return obj instanceof Ball && getPerimetro().intersects(((Ball) obj).getPerimetro());
@@ -91,7 +94,7 @@ public class Player extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);         
+        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
     }
-    
+
 }
