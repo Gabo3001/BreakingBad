@@ -9,6 +9,7 @@ package tutorial1;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.LinkedList;
 
 /**
  *
@@ -26,7 +27,9 @@ public class Game implements Runnable{
     private boolean running;
     private Player player;
     private Ball ball;              //Variable de tipo Ball
+    private Brick brick;
     private KeyManager keyManager;
+    private LinkedList<Brick> smallBricks;     //linked list for the small bricks
     
     public Game(String title, int width, int height){
         this.title = title;
@@ -34,6 +37,8 @@ public class Game implements Runnable{
         this.height = height;
         running = false;
         keyManager = new KeyManager();
+        smallBricks = new LinkedList<Brick>();
+        
     }
     
     public int getWidth(){
@@ -49,6 +54,11 @@ public class Game implements Runnable{
         Assets.init();
         player = new Player(330, getHeight() - 100, 1, 160, 80, this);
         ball = new Ball(385, getHeight() - 145, 1, 50, 50, this);
+        //initialize small bricks
+        for(int i = 0; i < 13; i++){
+            smallBricks.add(new Brick(1*(i*60)+ 10, 50, 50, 50, this, 1, 1));
+        }
+        
         display.getJframe().addKeyListener(keyManager);
     }
     
@@ -100,6 +110,29 @@ public class Game implements Runnable{
                 ball.setDirection(2);
             }
         }
+        
+        for (int i = 0; i < smallBricks.size(); i++) {
+            Brick brick =  smallBricks.get(i);
+            brick.tick();
+            if(ball.intersecta(brick)){
+                brick.setLives(brick.getLives() - 1);
+                //Make the ball bounce away from brick
+                if(ball.getDirection() == 1)
+                    ball.setDirection(4);
+                
+                if(ball.getDirection() == 2)
+                    ball.setDirection(3);
+                
+                if(ball.getDirection() == 3)
+                    ball.setDirection(2);
+                
+                if(ball.getDirection() == 4)
+                    ball.setDirection(1);
+            }
+            
+            
+            
+        }
     }
     
     private void render(){
@@ -114,6 +147,12 @@ public class Game implements Runnable{
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
             ball.render(g);
+            
+            for (int i = 0; i < smallBricks.size(); i++) {
+                Brick brick =  smallBricks.get(i);
+                brick.render(g);
+            }
+            
             bs.show();
             g.dispose();
         }

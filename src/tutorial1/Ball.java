@@ -128,5 +128,8 @@ public class Ball extends Item{
     public void render(Graphics g) {
         g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);    
     }
+    public boolean intersecta(Object obj) {
+        return obj instanceof Brick && getPerimetro().intersects(((Brick) obj).getPerimetro());
+    }
     
 }
