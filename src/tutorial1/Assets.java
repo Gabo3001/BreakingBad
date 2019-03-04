@@ -16,12 +16,14 @@ public class Assets {
     public static BufferedImage player;
     public static BufferedImage ball;
     public static BufferedImage smallBrick;
+    public static BufferedImage bigBrick;
     
     public static void init(){
         background = ImageLoader.loadImage("/tutorial1/images/Background.png");
         player = ImageLoader.loadImage("/tutorial1/images/PoliceCar.png");
         ball = ImageLoader.loadImage("/tutorial1/images/Ball.png");
         smallBrick = ImageLoader.loadImage("/tutorial1/images/meth.png");
+        bigBrick = ImageLoader.loadImage("/tutorial1/images/bigBrick.png");
     }
     
     

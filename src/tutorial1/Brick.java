@@ -75,7 +75,13 @@ public class Brick extends Item{
 
     @Override
     public void render(Graphics g) {
+        if(getType() == 1)
         g.drawImage(Assets.smallBrick, getX(), getY(), getWidth(), getHeight(), null);    
+        
+        if(getType() == 2){
+            g.drawImage(Assets.bigBrick, getX(), getY(), getWidth(), getHeight(), null);
+        }
+        
     }
     
    

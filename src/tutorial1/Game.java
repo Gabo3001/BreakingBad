@@ -31,6 +31,7 @@ public class Game implements Runnable {
     private Brick brick;
     private KeyManager keyManager;
     private LinkedList<Brick> smallBricks;     //linked list for the small bricks
+    private LinkedList<Brick> bigBricks;
     private boolean start;
     
     public Game(String title, int width, int height){
@@ -40,6 +41,7 @@ public class Game implements Runnable {
         running = false;
         keyManager = new KeyManager();
         smallBricks = new LinkedList<Brick>();
+        bigBricks = new LinkedList<Brick>();
         start = false;                  //Se inicializa start en false
     }
 
@@ -67,6 +69,9 @@ public class Game implements Runnable {
         //initialize small bricks
         for(int i = 0; i < 13; i++){
             smallBricks.add(new Brick(1*(i*60)+ 10, 50, 50, 50, this, 1, 1));
+        }
+        for(int i = 0; i < 6; i++){
+            bigBricks.add(new Brick(1*(i*120)+ 20, 130, 100, 50, this, 2, 3));
         }
         
         display.getJframe().addKeyListener(keyManager);
@@ -161,6 +166,31 @@ public class Game implements Runnable {
             brick.tick();
             
         }
+        
+        for (int i = 0; i < bigBricks.size(); i++) {
+            Brick brick =  bigBricks.get(i);
+            
+            if(ball.intersecta(brick)){
+                brick.setLives(brick.getLives() - 1);
+
+                //Make the ball bounce away from brick
+                if(ball.getDirection() == 1)
+                    ball.setDirection(3);
+                
+                else if(ball.getDirection() == 2)
+                    ball.setDirection(4);
+                
+                else if(ball.getDirection() == 3)
+                    ball.setDirection(1);
+                
+                else if(ball.getDirection() == 4)
+                    ball.setDirection(2);
+
+            }
+            
+            brick.tick();
+            
+        }
     }
 
     private void render() {
@@ -173,12 +203,16 @@ public class Game implements Runnable {
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
             ball.render(g);
-            
+            //render small bricks
             for (int i = 0; i < smallBricks.size(); i++) {
                 Brick brick =  smallBricks.get(i);
                 brick.render(g);
             }
-            
+            //render big bricks
+            for (int i = 0; i < bigBricks.size(); i++) {
+                Brick brick =  bigBricks.get(i);
+                brick.render(g);
+            }
             bs.show();
             g.dispose();
         }
