@@ -79,7 +79,15 @@ public class Brick extends Item{
         g.drawImage(Assets.smallBrick, getX(), getY(), getWidth(), getHeight(), null);    
         
         if(getType() == 2){
+            //bigBrick with no damage
+            if(getLives() == 3)
             g.drawImage(Assets.bigBrick, getX(), getY(), getWidth(), getHeight(), null);
+            //bigBrick after one hit
+            if(getLives() == 2)
+            g.drawImage(Assets.bigBrickCracked, getX(), getY(), getWidth(), getHeight(), null);
+            
+            if(getLives() == 1)
+              g.drawImage(Assets.bigBrickLast, getX(), getY(), getWidth(), getHeight(), null);
         }
         
     }
