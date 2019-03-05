@@ -151,6 +151,7 @@ public class Game implements Runnable {
             setStart(true);
             //Reset speed when ball falls
             ball.setSpeed(2);
+            countForPower = 7;
         }
         if (getKeyManager().pause){
             if (isPause()){
@@ -281,7 +282,7 @@ public class Game implements Runnable {
             }
             //render lives
             for(int i =0 ; i < getLives(); i++){
-               g.drawImage(Assets.heart, 1*(50*i), getHeight() - 50, 50, 50, null);
+               g.drawImage(Assets.heart, width - (50*i)- 50, 0, 50, 50, null);
             }
             
             if(getLives() == 0)
