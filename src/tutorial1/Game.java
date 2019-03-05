@@ -28,12 +28,14 @@ public class Game implements Runnable {
     private boolean running;
     private Player player;
     private Ball ball;              //Variable de tipo Ball
-    private Brick brick;
+    private Brick flask;
     private KeyManager keyManager;
     private LinkedList<Brick> smallBricks;     //linked list for the small bricks
     private LinkedList<Brick> bigBricks;
     private boolean start;
     private int lives; //player's lives
+    public boolean power; //to activate special power
+    private int countForPower; //count down to activate special power
     
     public Game(String title, int width, int height){
         this.title = title;
@@ -45,6 +47,9 @@ public class Game implements Runnable {
         bigBricks = new LinkedList<Brick>();
         start = false;                  //Se inicializa start en false
         lives = 3;
+        power = false;
+        countForPower = 7; //when count down reaches 0, make power available
+        
     }
 
     public boolean isStart() {
@@ -78,6 +83,7 @@ public class Game implements Runnable {
         Assets.init();
         player = new Player(330, getHeight() - 100, 1, 160, 80, this);
         ball = new Ball(385, getHeight() - 145, 1, 50, 50, this);
+        flask = new Brick(getWidth() + 50, 200, 50, 50, this, 3, 1 ); //flask for power up
         //initialize small bricks
         for(int i = 0; i < 13; i++){
             smallBricks.add(new Brick(1*(i*60)+ 10, 50, 50, 50, this, 1, 1));
@@ -133,6 +139,8 @@ public class Game implements Runnable {
         if (getKeyManager().space) {
             //Se colocara start en true
             setStart(true);
+            //Reset speed when ball falls
+            ball.setSpeed(2);
         }
         //Si la pelota intersecta con el player en la mitad derecha
         if (player.intersecta(ball)) {
@@ -162,6 +170,8 @@ public class Game implements Runnable {
             
             if(ball.intersecta(brick)){
                 brick.setLives(brick.getLives() - 1);
+                //decrease count down for power when brick is destroyed
+                countForPower = countForPower - 1;
 
                 //Make the ball bounce away from brick
                 if(ball.getDirection() == 1)
@@ -187,6 +197,10 @@ public class Game implements Runnable {
             
             if(ball.intersecta(brick)){
                 brick.setLives(brick.getLives() - 1);
+                //decrease count down for power when brick is destroyed
+                if(brick.getLives() == 0)
+                    countForPower = countForPower - 1;
+                    
 
                 //Make the ball bounce away from brick
                 if(ball.getDirection() == 1)
@@ -206,6 +220,20 @@ public class Game implements Runnable {
             brick.tick();
             
         }
+        //show flask when count down is over
+        if(countForPower == 0){
+            flask.setX(getWidth()/2 - 50);
+            power = true;
+            countForPower = 100;
+        }
+        
+        if(ball.intersecta(flask)){
+            ball.setSpeed(ball.getSpeed() + 2);
+            flask.setX(width + 20);
+        }
+            
+        
+            
     }
 
     private void render() {
@@ -218,6 +246,9 @@ public class Game implements Runnable {
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
             ball.render(g);
+            
+            if(power)
+                flask.render(g);
             //render small bricks
             for (int i = 0; i < smallBricks.size(); i++) {
                 Brick brick =  smallBricks.get(i);
@@ -235,6 +266,7 @@ public class Game implements Runnable {
             
             if(getLives() == 0)
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);
+            
             
             bs.show();
             g.dispose();

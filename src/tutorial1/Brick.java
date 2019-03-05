@@ -25,6 +25,7 @@ public class Brick extends Item{
         this.width = width;
         this.height = height;
         this.game = game;
+        //types:  small bricks(1), big bricks (2), power(3)
         this.type = type;
         this.lives = lives;
     }
@@ -87,8 +88,11 @@ public class Brick extends Item{
             g.drawImage(Assets.bigBrickCracked, getX(), getY(), getWidth(), getHeight(), null);
             
             if(getLives() == 1)
-              g.drawImage(Assets.bigBrickLast, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.bigBrickLast, getX(), getY(), getWidth(), getHeight(), null);
         }
+        
+        if(getType() == 3)
+            g.drawImage(Assets.flask, getX(), getY(), getWidth(), getHeight(), null);
         
     }
     
