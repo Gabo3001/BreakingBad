@@ -33,6 +33,7 @@ public class Game implements Runnable {
     private LinkedList<Brick> smallBricks;     //linked list for the small bricks
     private LinkedList<Brick> bigBricks;
     private boolean start;
+    private int lives; //player's lives
     
     public Game(String title, int width, int height){
         this.title = title;
@@ -43,6 +44,7 @@ public class Game implements Runnable {
         smallBricks = new LinkedList<Brick>();
         bigBricks = new LinkedList<Brick>();
         start = false;                  //Se inicializa start en false
+        lives = 3;
     }
 
     public boolean isStart() {
@@ -60,6 +62,16 @@ public class Game implements Runnable {
     public int getHeight() {
         return height;
     }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+    
+    
 
     private void init() {
         display = new Display(title, getWidth(), getHeight());
@@ -90,7 +102,7 @@ public class Game implements Runnable {
         long now;
         // initializing last time to the computer time in nanosecs
         long lastTime = System.nanoTime();
-        while (running) {
+        while (getLives() >= 0) {
             // setting the time now to the actual time
             now = System.nanoTime();
             // acumulating to delta the difference between times in timeTick units
@@ -140,6 +152,9 @@ public class Game implements Runnable {
             //Se coloca al player en la posicion inicial
             player.setX(330);
             player.setY(getHeight()-100);
+            //lose a live
+            setLives(getLives() - 1);
+            
         }
         
         for (int i = 0; i < smallBricks.size(); i++) {
@@ -213,6 +228,14 @@ public class Game implements Runnable {
                 Brick brick =  bigBricks.get(i);
                 brick.render(g);
             }
+            //render lives
+            for(int i =0 ; i < getLives(); i++){
+               g.drawImage(Assets.heart, 1*(50*i), getHeight() - 50, 50, 50, null);
+            }
+            
+            if(getLives() == 0)
+                g.drawImage(Assets.gameOver, 0, 0, width, height, null);
+            
             bs.show();
             g.dispose();
         }
