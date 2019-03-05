@@ -65,7 +65,7 @@ public class Ball extends Item {
     @Override
     public void tick() {
         //Mientras start sea true
-        if (game.isStart()) {
+        if (game.isStart() && game.isPause()) {
             //Las siguientes 4 condiciones indicaran al personaje la direccion a la 
             // que debe moverse, 1 para la derecha.arriba, 2 izquierda.arriba, 
             // 3 derecha.abajo y 4 izquierda.abajo
