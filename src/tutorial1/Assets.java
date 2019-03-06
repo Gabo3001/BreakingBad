@@ -22,6 +22,8 @@ public class Assets {
     public static BufferedImage heart; //heart image for lives
     public static BufferedImage gameOver; //game over screen
     public static BufferedImage flask; //flask icon for special power
+    public static BufferedImage sprites; //Sprites for the animation
+    public static BufferedImage playerSpin[];
     
     public static void init(){
         background = ImageLoader.loadImage("/tutorial1/images/Background.png");
@@ -34,6 +36,13 @@ public class Assets {
         heart = ImageLoader.loadImage("/tutorial1/images/heart.png");
         gameOver = ImageLoader.loadImage("/tutorial1/images/gameOver.png");
         flask = ImageLoader. loadImage("/tutorial1/images/flask.png");
+        sprites = ImageLoader.loadImage("/tutorial1/images/BallA.png");
+        SpreadSheet spritesheet = new SpreadSheet(sprites);
+        playerSpin = new BufferedImage[8];
+        //croping the pictures from the sheet int the array
+        for (int i = 0; i < 8; i++){
+            playerSpin[i] = spritesheet.crop(i * 267, 0, 230, 230);
+        }
     }
     
     
