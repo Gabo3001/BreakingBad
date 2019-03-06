@@ -64,7 +64,7 @@ public class Player extends Item {
     @Override
     public void tick() {
         //Mientras start sea true
-        if (game.isStart()) {
+        if (game.isStart() && game.isPause()) {
             // moving player depending on flags
             if (game.getKeyManager().left) {
                 setX(getX() - getSpeed());

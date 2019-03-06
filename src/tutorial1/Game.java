@@ -32,7 +32,8 @@ public class Game implements Runnable {
     private KeyManager keyManager;
     private LinkedList<Brick> smallBricks;     //linked list for the small bricks
     private LinkedList<Brick> bigBricks;
-    private boolean start;
+    private boolean start;          //Boolean that control the start
+    private boolean pause;          //Boolean that control the pause
     private int lives; //player's lives
     public boolean power; //to activate special power
     private int countForPower; //count down to activate special power
@@ -46,10 +47,19 @@ public class Game implements Runnable {
         smallBricks = new LinkedList<Brick>();
         bigBricks = new LinkedList<Brick>();
         start = false;                  //Se inicializa start en false
+        pause = true;                   //Pause is initialize in true
         lives = 3;
         power = false;
         countForPower = 7; //when count down reaches 0, make power available
         
+    }
+
+    public boolean isPause() {
+        return pause;
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 
     public boolean isStart() {
@@ -141,6 +151,16 @@ public class Game implements Runnable {
             setStart(true);
             //Reset speed when ball falls
             ball.setSpeed(2);
+        }
+        if (getKeyManager().pause){
+            if (isPause()){
+                setPause(false);
+                getKeyManager().pStop();
+            }
+            else{
+                setPause(true);
+                getKeyManager().pStop();
+            }
         }
         //Si la pelota intersecta con el player en la mitad derecha
         if (player.intersecta(ball)) {

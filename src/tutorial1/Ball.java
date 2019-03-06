@@ -19,6 +19,7 @@ public class Ball extends Item {
     private int height;
     private Game game;
     private int speed;
+    private Animation animationSpin;
 
     public Ball(int x, int y, int direction, int width, int height, Game game) {
 
@@ -28,6 +29,7 @@ public class Ball extends Item {
         this.height = height;
         this.game = game;
         this.speed = 2;
+        this.animationSpin = new Animation (Assets.playerSpin, 100);
     }
 
     public int getDirection() {
@@ -65,7 +67,8 @@ public class Ball extends Item {
     @Override
     public void tick() {
         //Mientras start sea true
-        if (game.isStart()) {
+        if (game.isStart() && game.isPause()) {
+            this.animationSpin.tick();
             //Las siguientes 4 condiciones indicaran al personaje la direccion a la 
             // que debe moverse, 1 para la derecha.arriba, 2 izquierda.arriba, 
             // 3 derecha.abajo y 4 izquierda.abajo
@@ -125,7 +128,7 @@ public class Ball extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(animationSpin.getCurretFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
     public boolean intersecta(Object obj) {

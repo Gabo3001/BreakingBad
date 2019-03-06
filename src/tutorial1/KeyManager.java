@@ -12,17 +12,18 @@ import java.awt.event.KeyListener;
  *
  * @author HOME
  */
-public class KeyManager implements KeyListener{
-    
+public class KeyManager implements KeyListener {
+
     public boolean up;
     public boolean down;
     public boolean left;
     public boolean right;
     public boolean space;
-    
+    public boolean pause;
+
     private boolean keys[];
-    
-    public KeyManager(){
+
+    public KeyManager() {
         keys = new boolean[256];
     }
 
@@ -32,24 +33,38 @@ public class KeyManager implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // set true to every key pressed
-        keys[e.getKeyCode()] = true;
+        //if the keyCode is different to 80 (keyCode for p)
+        if (e.getKeyCode() != 80) {
+            // set true to every key pressed
+            keys[e.getKeyCode()] = true;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // set false to every key released
-        keys[e.getKeyCode()] = false;
+        //if the keyCode is equl to 80 (keyCode for p)
+        if (e.getKeyCode() == 80) {
+            keys[e.getKeyCode()] = true;
+        } else {
+            // set false to every key released
+            keys[e.getKeyCode()] = false;
+        }
     }
     
+    public void pStop(){
+        //Function that set in false the p key
+        keys [80] = false;
+    }
+
     /**
-     *  to enable or disable moves on every tick
+     * to enable or disable moves on every tick
      */
-    public void tick(){
+    public void tick() {
         up = keys[KeyEvent.VK_UP];
         down = keys[KeyEvent.VK_DOWN];
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
+        pause = keys[KeyEvent.VK_P];
     }
 }
