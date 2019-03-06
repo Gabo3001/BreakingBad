@@ -20,6 +20,7 @@ public class KeyManager implements KeyListener {
     public boolean right;
     public boolean space;
     public boolean pause;
+    public boolean reset;
 
     private boolean keys[];
 
@@ -34,7 +35,7 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         //if the keyCode is different to 80 (keyCode for p)
-        if (e.getKeyCode() != 80) {
+        if (e.getKeyCode() != KeyEvent.VK_P && e.getKeyCode() != KeyEvent.VK_R) {
             // set true to every key pressed
             keys[e.getKeyCode()] = true;
         }
@@ -43,17 +44,22 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         //if the keyCode is equl to 80 (keyCode for p)
-        if (e.getKeyCode() == 80) {
+        if (e.getKeyCode() == KeyEvent.VK_P) {
             keys[e.getKeyCode()] = true;
-        } else {
+        } 
+        else if(e.getKeyCode() == KeyEvent.VK_R){
+            keys[e.getKeyCode()] = true;
+        }
+        else {
             // set false to every key released
             keys[e.getKeyCode()] = false;
         }
     }
     
     public void pStop(){
-        //Function that set in false the p key
-        keys [80] = false;
+        //Function that set in false the p and r key
+        keys [KeyEvent.VK_P] = false;
+        keys [KeyEvent.VK_R] = false;
     }
 
     /**
@@ -66,5 +72,6 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
         pause = keys[KeyEvent.VK_P];
+        reset = keys[KeyEvent.VK_R];
     }
 }
