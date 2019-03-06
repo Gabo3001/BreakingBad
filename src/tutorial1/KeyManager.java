@@ -20,6 +20,8 @@ public class KeyManager implements KeyListener {
     public boolean right;
     public boolean space;
     public boolean pause;
+    public boolean save;
+    public boolean load;
 
     private boolean keys[];
 
@@ -66,5 +68,7 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_RIGHT];
         space = keys[KeyEvent.VK_SPACE];
         pause = keys[KeyEvent.VK_P];
+        save = keys[KeyEvent.VK_S];
+        load = keys[KeyEvent.VK_L];
     }
 }
