@@ -42,6 +42,8 @@ public class Game implements Runnable {
     private int lives; //player's lives
     public boolean power; //to activate special power
     private int countForPower; //count down to activate special power
+    private boolean finish; //Boolean that control when the game stop
+    private int contBricks; //counter for the bricks
     
     public Game(String title, int width, int height){
         this.title = title;
@@ -55,15 +57,44 @@ public class Game implements Runnable {
         pause = true;                   //Pause is initialize in true
         lives = 3;
         power = false;
+        finish = false;                 //Finish is initialized in false
         countForPower = 7; //when count down reaches 0, make power available
+        contBricks = 0;   
         
+    }
+
+    public boolean isPower() {
+        return power;
     }
 
     public void setPower(boolean power) {
         this.power = power;
     }
-   
+    
+    public void setCountForPower(int countForPower) {
+        this.countForPower = countForPower;
+    }
 
+    public int getCountForPower() {
+        return countForPower;
+    }
+
+    public void setContBricks(int contBricks) {
+        this.contBricks = contBricks;
+    }
+
+    public int getContBricks() {
+        return contBricks;
+    }
+
+    public void setFinish(boolean finish) {
+        this.finish = finish;
+    }
+
+    public boolean isFinish() {
+        return finish;
+    }
+   
     public boolean isPause() {
         return pause;
     }
@@ -128,7 +159,7 @@ public class Game implements Runnable {
         long now;
         // initializing last time to the computer time in nanosecs
         long lastTime = System.nanoTime();
-        while (getLives() >= 0) {
+        while (running) {
             // setting the time now to the actual time
             now = System.nanoTime();
             // acumulating to delta the difference between times in timeTick units
@@ -161,7 +192,46 @@ public class Game implements Runnable {
             setStart(true);
             //Reset speed when ball falls
             ball.setSpeed(2);
-            countForPower = 7;
+
+            setCountForPower(7);
+
+        }
+        //if finish is true and the r key is press
+        if(isFinish() && getKeyManager().reset){
+            //Se pone start en falso
+            setStart(false);
+            //Se coloca ball en la posicion inicial
+            ball.setX(385);
+            ball.setY(getHeight()-145);
+            //Se coloca al player en la posicion inicial
+            player.setX(330);
+            player.setY(getHeight()-100);
+            //set lives to 3
+            setLives(3);
+            //set countForPower to 7
+            setCountForPower(7);
+            //set contBrick to 0
+            setContBricks(0);
+            //Set power to false
+            setPower(false);
+            //Set flask to its initial position
+            flask.setX(getWidth() + 50);
+            for (int i = 0; i < smallBricks.size(); i++) {
+                Brick brick =  smallBricks.get(i);
+                brick.setLives(1);
+                brick.setX(1*(i*60)+ 10);
+                brick.tick();
+            }
+            for (int i = 0; i < bigBricks.size(); i++) {
+                Brick brick =  bigBricks.get(i);
+                brick.setLives(3);
+                brick.setX(1*(i*120)+ 20);
+                brick.tick();
+            }
+            //Set finish to false
+            setFinish(false);
+            getKeyManager().pStop();
+
         }
         if (getKeyManager().pause){
             if (isPause()){
@@ -212,7 +282,8 @@ public class Game implements Runnable {
             if(ball.intersecta(brick)){
                 brick.setLives(brick.getLives() - 1);
                 //decrease count down for power when brick is destroyed
-                countForPower = countForPower - 1;
+                setCountForPower(getCountForPower()-1);
+                setContBricks(getContBricks()+1);
 
                 //Make the ball bounce away from brick
                 if(ball.getDirection() == 1)
@@ -239,9 +310,10 @@ public class Game implements Runnable {
             if(ball.intersecta(brick)){
                 brick.setLives(brick.getLives() - 1);
                 //decrease count down for power when brick is destroyed
-                if(brick.getLives() == 0)
-                    countForPower = countForPower - 1;
-                    
+                if(brick.getLives() == 0){
+                    setCountForPower(getCountForPower()-1);
+                    setContBricks(getContBricks()+1);
+                }
 
                 //Make the ball bounce away from brick
                 if(ball.getDirection() == 1)
@@ -262,15 +334,22 @@ public class Game implements Runnable {
             
         }
         //show flask when count down is over
-        if(countForPower <= 0){
+
+        if(getCountForPower() <= 0){
+
             flask.setX(getWidth()/2 - 50);
-            power = true;
-            countForPower = 100;
+            setPower(true);
+            setCountForPower(100);
         }
         
         if(ball.intersecta(flask)){
             ball.setSpeed(ball.getSpeed() + 2);
             flask.setX(width + 20);
+        }
+        //If you lose all your life or destroy all the bricks
+        if(getLives() == 0 || getContBricks() == 19){
+            //Set finish to true
+            setFinish(true);
         }
             
         
@@ -287,9 +366,16 @@ public class Game implements Runnable {
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
             ball.render(g);
-            
-            if(power)
+            //if power is true
+            if(isPower()){
+                //The render for the flask is done
                 flask.render(g);
+            }
+            //if pause is true
+            if(!isPause()){
+                //A pause image is draw
+                g.drawImage(Assets.pause, 320, 220, 150, 50, null);
+            }
             //render small bricks
             for (int i = 0; i < smallBricks.size(); i++) {
                 Brick brick =  smallBricks.get(i);
@@ -305,9 +391,9 @@ public class Game implements Runnable {
                g.drawImage(Assets.heart, width - (50*i)- 50, 0, 50, 50, null);
             }
             
-            if(getLives() == 0)
+            if(getLives() == 0 || getContBricks() == 19){
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);
-            
+            }
             
             bs.show();
             g.dispose();
@@ -371,6 +457,9 @@ public class Game implements Runnable {
             //counters
             fw.write(String.valueOf(countForPower) + "\n");
             
+            //start bool
+            fw.write(String.valueOf(start) + "\n");
+            
             fw.close();
             
             
@@ -414,7 +503,12 @@ public class Game implements Runnable {
             setPause(Boolean.parseBoolean(br.readLine()));
             
             //counters
-            countForPower = Integer.parseInt(br.readLine());
+            setCountForPower(Integer.parseInt(br.readLine()));
+
+            
+            //start bool
+            setStart(Boolean.parseBoolean(br.readLine()));
+            
             
         }catch(IOException ex){
             ex.printStackTrace();

@@ -21,6 +21,7 @@ public class Assets {
     public static BufferedImage bigBrickLast; //bigBrick after teaking two hits
     public static BufferedImage heart; //heart image for lives
     public static BufferedImage gameOver; //game over screen
+    public static BufferedImage pause; //pause screen
     public static BufferedImage flask; //flask icon for special power
     public static BufferedImage sprites; //Sprites for the animation
     public static BufferedImage playerSpin[];
@@ -35,6 +36,7 @@ public class Assets {
         bigBrickLast = ImageLoader.loadImage("/tutorial1/images/bigBrickLast.png");
         heart = ImageLoader.loadImage("/tutorial1/images/heart.png");
         gameOver = ImageLoader.loadImage("/tutorial1/images/gameOver.png");
+        pause = ImageLoader.loadImage("/tutorial1/images/pause.png");
         flask = ImageLoader. loadImage("/tutorial1/images/flask.png");
         sprites = ImageLoader.loadImage("/tutorial1/images/BallA.png");
         SpreadSheet spritesheet = new SpreadSheet(sprites);
