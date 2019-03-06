@@ -10,7 +10,12 @@ package tutorial1;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.FileReader;
 import java.util.LinkedList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+
 
 /**
  *
@@ -53,6 +58,11 @@ public class Game implements Runnable {
         countForPower = 7; //when count down reaches 0, make power available
         
     }
+
+    public void setPower(boolean power) {
+        this.power = power;
+    }
+   
 
     public boolean isPause() {
         return pause;
@@ -163,6 +173,16 @@ public class Game implements Runnable {
                 getKeyManager().pStop();
             }
         }
+        
+        //Save game 
+        if(getKeyManager().save){
+            saveGame();
+        }
+        
+        //Load game
+        if(getKeyManager().load){
+            loadGame();
+        }
         //Si la pelota intersecta con el player en la mitad derecha
         if (player.intersecta(ball)) {
             ball.setDirection(2);
@@ -242,7 +262,7 @@ public class Game implements Runnable {
             
         }
         //show flask when count down is over
-        if(countForPower == 0){
+        if(countForPower <= 0){
             flask.setX(getWidth()/2 - 50);
             power = true;
             countForPower = 100;
@@ -312,4 +332,95 @@ public class Game implements Runnable {
             }
         }
     }
+    
+    private void saveGame(){
+        try{
+            FileWriter fw = new FileWriter ("save.txt");
+            //player position
+            fw.write(String.valueOf(player.getX()) + "\n");
+            
+            //ball atributes
+            fw.write(String.valueOf(ball.getX()) + "\n");
+            fw.write(String.valueOf(ball.getY()) + "\n");
+            fw.write(String.valueOf(ball.getDirection()) + "\n");
+            fw.write(String.valueOf(ball.getSpeed()) + "\n");
+            
+            //small bricks position
+            for(int i = 0; i < smallBricks.size() ; i++){
+                Brick brick = smallBricks.get(i);
+                fw.write(String.valueOf(brick.getX() + "\n"));
+            }
+            
+            //big bricks position and lives
+            for(int i = 0; i < bigBricks.size() ; i++){
+                Brick brick = bigBricks.get(i);
+                fw.write(String.valueOf(brick.getX() + "\n"));
+                fw.write(String.valueOf(brick.getLives()) + "\n");
+            }
+            
+            //game lives
+            fw.write(String.valueOf(getLives()) + "\n");
+            
+            //power position and bool
+            fw.write(String.valueOf(flask.getX()) + "\n");
+            fw.write(String.valueOf(power) + "\n");
+            
+            //pause bool
+            fw.write(String.valueOf(pause) + "\n");
+            
+            //counters
+            fw.write(String.valueOf(countForPower) + "\n");
+            
+            fw.close();
+            
+            
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    private void loadGame(){
+        try{
+            BufferedReader br =  new BufferedReader (new FileReader ("save.txt"));
+            //player position
+            player.setX(Integer.parseInt(br.readLine()));
+            
+            //ball attributes
+            ball.setX(Integer.parseInt(br.readLine()));
+            ball.setY(Integer.parseInt(br.readLine()));
+            ball.setDirection(Integer.parseInt(br.readLine()));
+            ball.setSpeed(Integer.parseInt(br.readLine()));
+            
+            //small bricks position
+            for(int i = 0; i < smallBricks.size(); i++){
+                Brick brick = smallBricks.get(i);
+                brick.setX(Integer.parseInt(br.readLine()));
+            }
+            
+            //big bricks position
+            for(int i = 0; i < bigBricks.size(); i++){
+                Brick brick = bigBricks.get(i);
+                brick.setX(Integer.parseInt(br.readLine()));
+                brick.setLives(Integer.parseInt(br.readLine()));
+            }
+            //game lives
+            setLives(Integer.parseInt(br.readLine()));
+            
+            //power position and bool
+            flask.setX(Integer.parseInt(br.readLine()));
+            setPower(Boolean.parseBoolean(br.readLine()));
+            
+            //pause bool
+            setPause(Boolean.parseBoolean(br.readLine()));
+            
+            //counters
+            countForPower = Integer.parseInt(br.readLine());
+            
+        }catch(IOException ex){
+            ex.printStackTrace();
+            
+        }
+    }
+    
+    
 }
