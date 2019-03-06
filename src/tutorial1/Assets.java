@@ -34,7 +34,7 @@ public class Assets {
         bigBrick = ImageLoader.loadImage("/tutorial1/images/bigBrick.png");
         bigBrickCracked = ImageLoader.loadImage("/tutorial1/images/bigBrickCracked.png");
         bigBrickLast = ImageLoader.loadImage("/tutorial1/images/bigBrickLast.png");
-        heart = ImageLoader.loadImage("/tutorial1/images/heart.png");
+        heart = ImageLoader.loadImage("/tutorial1/images/greenHeart.png");
         gameOver = ImageLoader.loadImage("/tutorial1/images/gameOver.png");
         pause = ImageLoader.loadImage("/tutorial1/images/pause.png");
         flask = ImageLoader. loadImage("/tutorial1/images/flask.png");
