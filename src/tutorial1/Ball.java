@@ -121,7 +121,11 @@ public class Ball extends Item {
         }
 
     }
-
+    /**
+     * Creates a rectangle around the ball
+     * 
+     * @return a rectangle with the dimensions of the ball
+     */
     public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
@@ -130,7 +134,12 @@ public class Ball extends Item {
     public void render(Graphics g) {
         g.drawImage(animationSpin.getCurretFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
-
+    /**
+     * This function tells us when the ball intersects another object
+     * 
+     * @param obj gets the object that intersects with the ball
+     * @return a boolean when the ball intersects another object
+     */
     public boolean intersecta(Object obj) {
         return obj instanceof Brick && getPerimetro().intersects(((Brick) obj).getPerimetro());
     }

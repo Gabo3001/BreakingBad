@@ -82,19 +82,40 @@ public class Player extends Item {
 
     }
 
-    //Funcion que crea un rectangulo en la mitad izquierda del player
+    
+    /**
+     * Creates a rectangle in the left half of the player
+     * 
+     * @return a rectangle with the dimentions of the left half of the player
+     */
     public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), 80, getHeight());
     }
-    //Funcion que crea un rectangulo en la mitad derecha del player
+    /**
+     * Creates a rectangle in the right half of the player
+     * 
+     * @return a rectangle with the dimentions of the right half of the player
+     */
     public Rectangle getPerimetro2() {
         return new Rectangle(getX()+80, getY(), 80, getHeight());
     }
-    //Funcion que nos checa si coliciona
+    /**
+     * check if the left half of the player intersects with the ball
+     * 
+     * @param obj gets the object that intersects with the player
+     * @return a boolean when the left half of the player intersects
+     * another object
+     */
     public boolean intersecta(Object obj) {
         return obj instanceof Ball && getPerimetro().intersects(((Ball) obj).getPerimetro());
     }
-    //Funcion que nos checa si coliciona
+    /**
+     * check if the right half of the player intersects with the ball
+     * 
+     * @param obj gets the object that intersects with the player
+     * @return a boolean when the right half of the player intersects 
+     * another object
+     */
     public boolean intersecta2(Object obj) {
         return obj instanceof Ball && getPerimetro2().intersects(((Ball) obj).getPerimetro());
     }

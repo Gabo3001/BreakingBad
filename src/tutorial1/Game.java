@@ -44,6 +44,7 @@ public class Game implements Runnable {
     private int countForPower; //count down to activate special power
     private boolean finish; //Boolean that control when the game stop
     private int contBricks; //counter for the bricks
+    private SoundClip song;
     
     public Game(String title, int width, int height){
         this.title = title;
@@ -59,7 +60,12 @@ public class Game implements Runnable {
         power = false;
         finish = false;                 //Finish is initialized in false
         countForPower = 7; //when count down reaches 0, make power available
-        contBricks = 0;   
+        contBricks = 0;  
+        song = new SoundClip("/tutorial1/music/Tamacun.wav");
+        //Activa la repetición del clip
+        song.setLooping(true);
+        //Reproduce el clip
+        song.play();
         
     }
 
@@ -186,6 +192,7 @@ public class Game implements Runnable {
 
         player.tick();
         ball.tick();
+        
         //Si se preciona space
         if (getKeyManager().space) {
             //Se colocara start en true
@@ -216,12 +223,14 @@ public class Game implements Runnable {
             setPower(false);
             //Set flask to its initial position
             flask.setX(getWidth() + 50);
+            //Set the smallBrick to their initial positions
             for (int i = 0; i < smallBricks.size(); i++) {
                 Brick brick =  smallBricks.get(i);
                 brick.setLives(1);
                 brick.setX(1*(i*60)+ 10);
                 brick.tick();
             }
+             //Set the bigBrick to their initial positions
             for (int i = 0; i < bigBricks.size(); i++) {
                 Brick brick =  bigBricks.get(i);
                 brick.setLives(3);
@@ -230,35 +239,51 @@ public class Game implements Runnable {
             }
             //Set finish to false
             setFinish(false);
+            //The song is played
+            song.play();
+            //pStop is called set the key press back to false
             getKeyManager().pStop();
 
         }
+        //When p is press
         if (getKeyManager().pause){
+            //if pause is true
             if (isPause()){
+                //set pause to false
                 setPause(false);
+                //pStop is called set the key press back to false
                 getKeyManager().pStop();
             }
+            //if pause is false
             else{
+                //set pause to true
                 setPause(true);
+                //pStop is called set the key press back to false
                 getKeyManager().pStop();
             }
         }
         
-        //Save game 
+        //when s is press
         if(getKeyManager().save){
+            //the game is saved
             saveGame();
         }
         
-        //Load game
+        //when l is press
         if(getKeyManager().load){
+            //The game is load
             loadGame();
+            //The song is played
+            song.play();
         }
         //Si la pelota intersecta con el player en la mitad derecha
         if (player.intersecta(ball)) {
+            //The direction of the ball is changed to 2
             ball.setDirection(2);
         }
         //Si la pelota intersecta con el player en la mitad derecha
         else if (player.intersecta2(ball)) {
+            //The direction of the ball is changed to 1
             ball.setDirection(1);
         }
         //Si la pelota sale de la pantalla por abajo
@@ -278,11 +303,13 @@ public class Game implements Runnable {
         
         for (int i = 0; i < smallBricks.size(); i++) {
             Brick brick =  smallBricks.get(i);
-            
+            //If the ball intersects a brick
             if(ball.intersecta(brick)){
+                //the brick lose one life
                 brick.setLives(brick.getLives() - 1);
                 //decrease count down for power when brick is destroyed
                 setCountForPower(getCountForPower()-1);
+                //add q to the counter of bricks destroyed 
                 setContBricks(getContBricks()+1);
 
                 //Make the ball bounce away from brick
@@ -306,13 +333,16 @@ public class Game implements Runnable {
         
         for (int i = 0; i < bigBricks.size(); i++) {
             Brick brick =  bigBricks.get(i);
-            
+            //if ball intersects a brick
             if(ball.intersecta(brick)){
+                //brick lose one life
                 brick.setLives(brick.getLives() - 1);
                 //decrease count down for power when brick is destroyed
                 if(brick.getLives() == 0){
-                    setCountForPower(getCountForPower()-1);
-                    setContBricks(getContBricks()+1);
+                //decrease count down for power when brick is destroyed
+                setCountForPower(getCountForPower()-1);
+                //add q to the counter of bricks destroyed 
+                setContBricks(getContBricks()+1);
                 }
 
                 //Make the ball bounce away from brick
@@ -334,22 +364,26 @@ public class Game implements Runnable {
             
         }
         //show flask when count down is over
-
+        
         if(getCountForPower() <= 0){
 
             flask.setX(getWidth()/2 - 50);
             setPower(true);
             setCountForPower(100);
         }
-        
+        //if ball intersect the flask
         if(ball.intersecta(flask)){
+            //ball increase its speed by 2
             ball.setSpeed(ball.getSpeed() + 2);
+            //the flask disapear from the screen
             flask.setX(width + 20);
         }
         //If you lose all your life or destroy all the bricks
         if(getLives() == 0 || getContBricks() == 19){
             //Set finish to true
             setFinish(true);
+            //The song is stoped
+            song.stop();
         }
             
         
@@ -390,8 +424,9 @@ public class Game implements Runnable {
             for(int i =0 ; i < getLives(); i++){
                g.drawImage(Assets.heart, 1*(50*i), height - 50, 50, 50, null);
             }
-            
+            //if the lives get to 0 or all the bricks are destroyed
             if(getLives() == 0 || getContBricks() == 19){
+                //the game over screen appears
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);
             }
             
@@ -418,7 +453,9 @@ public class Game implements Runnable {
             }
         }
     }
-    
+    /**
+     * Function that save key variables of the game in a txt file
+     */
     private void saveGame(){
         try{
             FileWriter fw = new FileWriter ("save.txt");
@@ -467,7 +504,10 @@ public class Game implements Runnable {
             ex.printStackTrace();
         }
     }
-    
+    /**
+     * function that load the information saved in the save.txt file to recover
+     * the key variables when the game was save for the last time
+     */
     private void loadGame(){
         try{
             BufferedReader br =  new BufferedReader (new FileReader ("save.txt"));

@@ -69,7 +69,11 @@ public class Brick extends Item{
             
         
     }
-    
+    /**
+     * Creates a rectangle around the brick
+     * 
+     * @return a rectangle with the dimensions of the brick
+     */
     public Rectangle getPerimetro() {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
